@@ -1,0 +1,109 @@
+---
+title: "Day 3 Homework"
+output: html_document
+---
+
+The goal of this homework is to get practice with manipulating data.
+
+```{r}
+library(reshape2)
+mydata <- read.csv("~/Desktop/r_programming_bsos/day2/ABN.csv")
+mydata
+```
+
+
+1. Make both a "wide" and a "long" version of your data
+
+<<<<<<< HEAD
+```{r}
+
+?melt
+mydata.melt <- melt(mydata, measure.vars = c("Living.Correct", "Hard.Correct", "Fit.Correct", variable.name = "Correctness", value.name = "selection"))
+# confused about variable.name and value.name
+```
+
+  - casting with a LOT of variables
+```{r eval=FALSE}
+mydata.wide <- dcast(mydata.long, [80 columns here] ~ split)
+
+columns.to.keep <- colnames(mydata.long)[1:80]
+columns.to.keep.pasted <- paste(colums.to.keep, collapse = "+")
+my.cast.formula <- as.formula(paste(columns.to.keep.pasted, "~split"))
+class(my.cast.formula) # "formula"
+=======
+- casting with a LOT of variables
+
+```{r eval=FALSE}
+
+mydata.wide <- dcast(mydata.long, [80 columns here] ~ split)
+
+columns.to.keep <- colnames(mydata.long)[1:80]
+columns.to.keep.pasted <- paste(columns.to.keep, collapse = " + ")
+my.cast.formula <- as.formula(paste(columns.to.keep.pasted, " ~ split"))
+class(my.cast.formula)  # "formula"
+>>>>>>> 42030da807d34c34a9518434fe1abdd1af641018
+mydata.wide <- dcast(mydata.long, formula = my.cast.formula)
+
+
+```
+
+<<<<<<< HEAD
+
+=======
+>>>>>>> 42030da807d34c34a9518434fe1abdd1af641018
+2. Transform a variable
+
+```{r}
+mydata
+mydata$Delayed.Raw2 <- mydata$Delayed.Raw * 100
+mydata$Delayed.Raw2
+mydata
+```
+
+
+3. Recode a factor
+
+```{r}
+mydata$Age_Years <- as.factor(mydata$Age_Years)
+mydata$Age_Years
+summary(mydata$Age_Years)
+levels(mydata$Age_Years)
+levels(mydata$Age_Years) <- c("5yo", "6yo", "7yo", "8yo")
+levels(mydata$Age_Years)
+
+
+```
+
+4. Add a new factor, where the levels are conditional on the values of some other variable. E.g., a factor of "high", "medium", and "low" based on thresholds for another variable.
+
+```{r}
+?as.numeric
+mydata$Total.Correct <- as.numeric(mydata$Total.Correct)
+summary(mydata$Total.Correct)
+mydata$accuracy <- "medium"
+mydata$accuracy[mydata$Total.Correct < 10] <- "high"
+mydata$accuracy[mydata$Total.Correct > 5] <- "low"
+mydata$accuracy <- as.factor(mydata$accuracy)
+summary(mydata$accuracy)
+levels(mydata$accuracy)
+
+```
+
+
+5. Reorder the levels of this new factor
+
+```{r}
+?factor
+levels(mydata$accuracy)
+mydata$accuracy <- factor(mydata$accuracy, levels = c("low", "high"))
+levels(mydata$accuracy)
+
+```
+
+# unsure how to do next steps
+
+6. Choose a factor that could be re-coded as multiple dimensions (recall the sepal/petal vs. length/width breakdown). If you don't have one, try to create one.  Now create two (or more) new factors that represent these dimensions.
+
+7. Using `dcast`, aggregate some variable into "cell means" of some kind.
+
+8.  Save all of the above in a well-documented R Markdown document.  Email me the .Rmd file (and if you use different or updated data from Day 2 Homework, send that to me, too).

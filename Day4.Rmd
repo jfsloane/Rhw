@@ -1,0 +1,85 @@
+---
+title: "Day 4 Homework"
+output: html_document
+---
+
+1. Change the column names of your data to something easier to work with.  If you like your column names, change them into something else reasonable, just for practice.
+
+```{r}
+read.csv("~/Desktop/r_programming_bsos/day2/ABN.csv")
+mydata <- read.csv("~/Desktop/r_programming_bsos/day2/ABN.csv")
+mydata
+oldnames <- colnames(mydata)
+oldnames
+# just working with the first 23 columns (one task)
+mycolnames <- c("SubID", "MRIY/N", "ABN", "Sex", "Age", "PicRecall", "LivCor", "LivIntr", "LivRepeat", "HardCor", "HardIntr", "HardRepeat", "FitCor", "FitIntr", "FitRepeat", "TotCor", "TotIntr", "TotRepeat", "StoryRecImmedRaw", "ImmedThemRaw", "DelRaw", "DelayThemRaw", "DelayRec")
+mycolnames
+```
+
+
+2. List ALL the issues you can see where it looks like your data is being read in a weird way.  If your data looks perfect, find some way to mess it up :-)
+
+```{r}
+mydata
+
+```
+  - some missing numbers just left as blanks in raw data
+
+3. Pick one or two of the most egregious or problematic of the issues in #2 and fix them.
+
+```{r}
+?read.table
+?NA
+# not sure what to do 
+```
+
+
+4. Check for NAs, and report where you see them (try to pinpoint where they are, not just "5 NAs in column seven".
+
+```{r}
+# used all of data set 
+mydata2 <- read.csv("~/Desktop/r_programming_bsos/day2/ABNData.csv")
+
+mydata2
+summary(mydata2)
+which(is.na(mydata2[, 1]))
+complete.cases(mydata2) # vector as long as data is 
+?complete.cases
+?which
+```
+  - MRI?Y/N: rows 35, 36, 38, 44, 46, 48
+  - number.of.trials.cond: rows 3 and 23
+  
+5. Decide what you think you should do about the NAs, and say why.  If you can, try to implement this decision.
+  - is it possible to remove the NAs so you can run analyses just excluding the missing values
+
+6. Remove any problematic rows and/or columns.  Say why you want to remove them.  If there aren't any problems, describe why you think there are no problems.
+  - so far, haven't run into any problems
+  - may want to remove the two columns that contained the NA values, so I can run tests if I do not solve the problem another way
+
+7. Re-code at least one factor.  Provide a table that shows the correspondence between old levels and new levels.
+
+```{r}
+mydata
+mydata$scode[mydata$Sex == "M"] <- "0"
+mydata$scode[mydata$Sex == "F"] <- "1"
+mydata$scode <- factor(mydata$scode)
+mydata$scode
+```
+  - use levels or factors 
+
+8. Run TWO DIFFERENT simple analyses or statistical tests, such as linear regression (`lm()`), logistic regression (`glm()`), correlation test (`cor.test()`), t-test (`t.test()`), or non-parametric tests (e.g., `wilcox.test()`).  For each of these:
+  - Describe why you are doing this analysis, i.e., what question is it answering?
+  - I won't judge you on statistical expertise!  (though I will make comments if I think I can be helpful)
+  - Report some key statistics from the analysis, using inline code
+  
+```{r}
+mydata
+cor.test(mydata[4], mydata[16])
+# wanted to do a correlation test between sex and total correct to see if there are any gender difference, but got message that said "x must be a numeric vector" and I thought they were numeric so I am unsure what to do
+t.test(mydata[16], mydata[19])
+cor.test(mydata[16], mydata[19]) # not sure what is wrong
+
+```
+  - wanted to do a t test between total correct and story recall to compare the means, I would also want to run a correlation test because I would predict a positive correlation between the two and want to see if that is true, but I can't seem to figure out how to do the correlation test correctly
+  
